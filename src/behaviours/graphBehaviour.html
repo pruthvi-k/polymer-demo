@@ -1,0 +1,23 @@
+<script>
+var GraphBehaviour = GraphBehaviour || {};
+
+GraphBehaviour.RenderBehaviour = {
+	 properties: {
+			graphConfig: {
+			  type: Object,
+			  value: function() {
+				return {};
+			  },
+			  notify: true
+			
+			}
+      },
+	 observers:['_graphConfigChanged(graphConfig.*)'],
+	  
+	  _graphConfigChanged: function(value) {
+		console.log('config chnaged', value);
+		this.fire('update-master-config', { config: this.graphConfig });
+	  }
+	
+} 
+</script>

@@ -1,0 +1,67 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="child-page">
+    <template>
+        <template is="dom-repeat" items="[[itemArray]]">
+            <div>[[item]]</div>
+        </template>
+        <div on-click="_changeArray">Change</div>
+    </template>
+    <script>
+        Polymer({
+            is: 'child-page',
+            properties: {
+                itemArray: {type: Array, notify: true}
+            },
+            _changeArray: function() {
+                console.log('child');
+                this.itemArray = [Math.random(),5,6,7,8,Math.random()];
+            }
+        })
+    </script>
+</dom-module>
+
+
+<dom-module id="xchild-page">
+    <template>
+        this is child 2
+        <template is="dom-repeat" items="[[xitemArray]]">
+            <div>[[item]]</div>
+        </template>
+
+    </template>
+    <script>
+        Polymer({
+            is: 'xchild-page',
+            properties: {
+                xitemArray: {type: Array, notify: true}
+            },
+            _changexitemArray: function() {
+                console.log('chil2');
+                this.xitemArray = [4,6,7,8,3];
+            }
+        })
+    </script>
+</dom-module>
+
+<dom-module id="parent-page">
+    <template>
+        <span>Item count: </span><span>[[itemArray.length]]</span>
+        <child-page item-array="{{itemArray}}"></child-page>
+        <xchild-page xitem-array="{{xitemArray}}"></xchild-page>
+    </template>
+    <script>
+        Polymer({
+            is: 'parent-page',
+            properties: {
+                itemArray: {type: Array, value: [1,2,3],observer:'_xitemchange'},
+                xitemArray: {type: Array, value: [4,5,6]}
+            },
+            _xitemchange:function() {
+                console.log('parent');
+                this.xitemArray = this.itemArray;
+            }
+
+        })
+    </script>
+</dom-module>

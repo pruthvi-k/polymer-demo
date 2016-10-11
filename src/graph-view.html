@@ -1,0 +1,153 @@
+
+<!--<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">-->
+<link rel="import" href="behaviours/graphBehaviour.html">
+
+<dom-module id="graph-view">
+    <script src="http://code.highcharts.com/adapters/standalone-framework.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+
+    <template>
+        {{graphTitle}}
+        {{graphData.title}}
+        <paper-material elevation="1">
+            <div id="chartContainer"></div>
+        </paper-material>
+    </template>
+
+    <script>
+var chart;
+Polymer({
+    is: 'graph-view',
+    properties: {
+        seriesData: {type: Object, notify: true},
+        showGraph: {type: Boolean, value: false},
+        graphTitle: {type: String, notify: true, observer: '_setGraphTitle'},
+        type: {type: String, notify: true, observer: '_setGraphType'},
+        timespan:{type: Number, notify: true, observer: '_filterData'},
+        filterType: {type: String}
+    },
+    ready: function () {
+//        var options = options || new Object();
+//
+//        options.chart = options.chart || new Object();
+//        options.chart.renderTo = 'chartContainer';
+//        options.chart.type = 'bar';
+//
+//        options.series = new Array();
+//        options.series[0] = new Object();
+//        options.series[0].name = 'Jane';
+//        options.series[0].data = new Array(1, 0, 4);
+
+        //var chart = new Highcharts.Chart(options);
+    },
+    _filterData: function(value) {
+        console.log('filter data', value);
+        var today = new Date();
+        var weekStart = new Date(today.setDate(today.getDate() - today.getDay()-value)).toUTCString();
+        //var current = new Date();
+        //var startDate = current.setDate(current.getDate() - value);
+        console.log('past date', weekStart);
+    },
+    attached: function () {
+        this.showGraph = true;
+        this.renderChart();
+    },
+    _setGraphTitle: function (value) {
+        console.log('graph title changes', value);
+    },
+    _setGraphType: function (value) {
+        this._changeType(this.chart, value.toLowerCase());
+    },
+    _changeType: function (chart, newType)
+    {
+        var noS = chart.series.length;       
+        for (var i = 0; i <= noS; i++)
+        {
+            if (chart.series[i])
+            {
+                chart.series[i].update({
+                    type: newType
+                });
+            }
+        }
+    },
+    renderChart: function () {
+        if (this.showGraph) {
+            this.chart = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'chartContainer',
+                    type: 'column'
+                },
+                title: {
+                    text: 'Vertical Grouped Chart'
+                },
+                xAxis: {
+                    type: 'datetime',
+                    dateTimeLabelFormats: {// don't display the dummy year
+                        month: '%e. %b',
+                        year: '%b'
+                    },
+                    title: {
+                        text: 'Date'
+                    }
+                },
+                series: this.getSeriesData()
+            });
+        }
+    },
+    _filterData: function() {
+        
+    },
+    getSeriesData: function () {
+        return [{
+                name: 'Open',
+                data: [
+                    [Date.UTC(2016, 9, 21), 0],
+                    [Date.UTC(2016, 10, 4), 0.28],
+                    [Date.UTC(2016, 10, 9), 0.25],
+                    [Date.UTC(2016, 5, 11), 0.79],
+                    [Date.UTC(2016, 0, 26), 0.72],
+                    [Date.UTC(2016, 3, 3), 1.02],
+                    [Date.UTC(2016, 1, 11), 1.12],
+                ],
+                pointWidth: 28
+            }, {
+                name: 'Awaiting',
+                data: [
+                    [Date.UTC(2016, 11, 29), 0.47],
+                    [Date.UTC(2016, 0, 11), 0.79],
+                    [Date.UTC(2016, 3, 26), 0.72],
+                    [Date.UTC(2016, 2, 3), 1.02],
+                    [Date.UTC(2016, 1, 11), 1.12],
+                    [Date.UTC(2016, 9, 21), 0],
+                    [Date.UTC(2016, 5, 4), 0.28],
+                    [Date.UTC(2016, 10, 9), 0.25],
+                ],
+                pointWidth: 28
+            }, {
+                name: 'Close',
+                data: [
+                    [Date.UTC(2016, 11, 29), 0.47],
+                    [Date.UTC(2016, 0, 11), 0.79],
+                    [Date.UTC(2016, 6, 26), 0.72],
+                    [Date.UTC(2016, 1, 3), 1.02],
+                    [Date.UTC(2016, 4, 11), 1.12],
+                    [Date.UTC(2016, 3, 3), 1.02],
+                    [Date.UTC(2016, 2, 11), 1.12],
+                    [Date.UTC(2016, 9, 21), 0],
+                ],
+                pointWidth: 28
+            }];
+    }
+    // behaviors: [GraphBehaviour.RenderBehaviour],	 
+    /*ready: function() {
+     this.addEventListener('updateGraphConfig', this._shouldUpdateGraphConfig);
+     },
+     
+     _shouldUpdateGraphConfig: function(event) {
+     console.log('event from graph view', event.detail);
+     this.config = event.detail.config;
+     }*/
+});
+    </script>
+</dom-module>

@@ -1,0 +1,98 @@
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="behaviours/graphBehaviour.html">
+
+<dom-module id="settings-panel">
+    <template>
+        <div>
+            <paper-input label="Title" value="{{graphConfig.title}}"></paper-input>
+        </div>
+
+        <div>
+            <paper-dropdown-menu label="Layout" value="{{graphConfig.layout}}">
+                <paper-listbox class="dropdown-content" selected="1">
+                    <paper-item>Column</paper-item>
+                    <paper-item>Bar</paper-item>
+                    <paper-item>Pie</paper-item>
+                </paper-listbox>
+            </paper-dropdown-menu>
+        </div>
+
+        <div>
+            <paper-dropdown-menu label="Past Weeks" value="{{graphConfig.timeSpan}}">
+                <paper-listbox class="dropdown-content" selected="1">
+                    <paper-item value="12">12</paper-item>
+                    <paper-item value="6">6</paper-item>
+                    <paper-item value="1">1</paper-item>
+                </paper-listbox>
+            </paper-dropdown-menu>
+        </div>
+
+        <div>
+            <paper-dropdown-menu label="Refresh Rate" value="{{graphConfig.refreshRate}}">
+                <paper-listbox class="dropdown-content" selected="1">
+                    <paper-item>1 Hour</paper-item>
+                    <paper-item>30 Minutes</paper-item>
+                    <paper-item>5 Minutes</paper-item>
+                    <paper-item>1 Minute</paper-item>
+                </paper-listbox>
+            </paper-dropdown-menu>
+        </div>
+
+        <div>
+            <paper-textarea label="Graph JSON" value="{{graphConfig.seriesData}}"></paper-textarea>
+        </div>
+        <!--<div on-click="_changeArray">Change</div>-->
+    </template>
+
+    <script>
+        Polymer({
+            is: 'settings-panel',
+            //behaviors: [GraphBehaviour.RenderBehaviour], 
+            properties: {
+                settingsData: {type: Object, notify: true},
+                graphConfig: {type: Object,
+                    value: function () {
+                        return {};
+                    }
+                }
+            },
+            observers: ['_graphConfigChanged(graphConfig.*)'],
+            _graphConfigChanged: function (data) {
+                console.log('graph config change', data);
+                var type = "";
+                switch(data.path) {
+                    case 'graphConfig.title':
+                        type = 'title';
+                        break;
+                    case 'graphConfig.layout':
+                        type = 'layout';
+                        break;
+                    case 'graphConfig.timeSpan':
+                        type = 'timespan';
+                        break;
+                    case 'graphConfig.refreshRate':
+                        type = 'refresh-rate';
+                        break;                        
+                    case 'graphConfig.seriesData':
+                        type = 'series';
+                        break;
+                }
+                
+                this.settingsData = {
+                    type: type,
+                    value: data.value
+                };
+                //this.settingsData = d.base;
+            }
+            //            _changeArray: function() {
+            //                console.log('from settings panel',this.settingsData);
+            //              //  this.settingsData = {title:this.gdata.title};
+            //            },
+
+        });
+    </script>
+</dom-module>

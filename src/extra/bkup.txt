@@ -1,0 +1,338 @@
+<script>
+var GraphBehaviour = GraphBehaviour || {};
+
+GraphBehaviour.RenderBehaviour = {
+	properties: {
+			graphConfig: {
+			  type: Object,
+			  value: function() {
+				return {};
+			  },
+			  
+			 // observer: '_graphConfigChanged'
+			}
+      },
+	
+	  observers:['_graphConfigChanged(graphConfig.*)'],
+	  
+	  _graphConfigChanged: function(value) {
+		console.log('config chnaged', value);
+		this._updateGraph(value)
+		//this.plotGraph(value);
+	  },
+		_updateGraph: function(configData) {
+		/*this.fire('update-graph-config', {
+          config: value,
+        });*/
+		console.log('behaviour ... update');
+		//abstract
+			//console.log('update graph', configData);
+			//this.plotGraph(configData.config);
+		} ,
+	
+	 
+	plotGraph: function(config) {
+	console.log('conifg plot graph')
+			/*$(this.$.graphContainer).highcharts({
+                chart: {
+				type: 'column'
+			},
+			title: {
+				text: config.title
+			},
+		    xAxis: {
+				type: 'datetime',
+				dateTimeLabelFormats: { // don't display the dummy year
+					month: '%e. %b',
+					year: '%b'
+				},
+				title: {
+					text: 'Date'
+				}
+			},
+			yAxis: {
+				min: 0,
+				title: {
+					text: 'Rainfall (mm)'
+				}
+			},
+            series: this.getSeriesData()
+        })*/
+	  },
+	  getSeriesData: function() {
+		return [{
+					name: 'Cities',
+					data: [1000, 2500, 1500]
+                }];
+	  }
+} 
+</script>
+
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>    
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="behaviours/graphBehaviour.html">
+
+<dom-module id="graph-view">
+  <template>
+  Hello  {{info.name}},
+   {{config}}
+	<div id="graphContainer">
+	{{graphConfig}}
+	</div>
+	<!--<iron-ajax
+    auto
+    url="series.json"
+    handle-as="json"
+    on-response="handleResponse"
+    debounce-duration="300"></iron-ajax>-->
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'graph-view',
+	  //behaviors: [GraphBehaviour.RenderBehaviour],
+	  ready: function() {
+		console.log('from graph', this.graphConfig);
+	  },
+
+		/*handleResponse:function(data) {
+			console.log('response', data.detail.response);
+			this.seriesData = $.parseJSON(data.detail.response);
+			//console.log('dd', this.seriesData);
+			//console.log($.parseJSON(response.data));
+		},
+		
+      properties: {
+        seriesData: {
+          type: Object,
+          value: function() {
+			return {}
+          }
+        }
+      },
+	   plotGraph: function(config) {
+			$(this.$.graphContainer).highcharts({
+                chart: {
+				type: 'column'
+			},
+			title: {
+				text: config.title
+			},
+		    xAxis: {
+				type: 'datetime',
+				dateTimeLabelFormats: { // don't display the dummy year
+					month: '%e. %b',
+					year: '%b'
+				},
+				title: {
+					text: 'Date'
+				}
+			},
+			yAxis: {
+				min: 0,
+				title: {
+					text: 'Rainfall (mm)'
+				}
+			},
+            series: this.getSeriesData()
+        })
+	  },
+	  getSeriesData: function() {
+		return [{
+					name: 'Cities',
+					data: [1000, 2500, 1500]
+                }];
+	  },
+	   listeners: {
+		'update-graph-config':'_updateGraph'
+		},*/
+		
+		
+    });
+  </script>
+</dom-module>
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-layout/demo/sample-content.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+
+<link rel="import" href="settings-panel.html">
+<link rel="import" href="graph-view.html">
+
+<dom-module id="master-layout">
+
+  <template>
+<style>
+app-header {
+background-color: #00897B;
+color: #fff;
+}
+app-header paper-icon-button {
+--paper-icon-button-ink-color: white;
+}
+</style>
+<app-drawer-layout>
+	<app-drawer align="end">
+		<app-toolbar>Getting Started</app-toolbar>
+		<settings-panel></settings-panel>
+	</app-drawer>
+	
+	<app-header-layout >
+		<app-header fixed effects="waterfall">
+			<app-toolbar>
+			  <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+			  <div main-title>Status Report</div>     
+			</app-toolbar>
+		</app-header>
+		
+		<div>
+			<graph-view></graph-view>
+		</div>
+	</app-header-layout>
+</app-drawer-layout>
+</template>
+
+
+  <script>
+
+    Polymer({
+
+      is: 'master-layout',
+	  behaviors: [GraphBehaviour.RenderBehaviour],
+	  _updateGraph: function(configData) {
+		/*this.fire('update-graph-config', {
+          config: value,
+        });*/
+		console.log('behaviour ... update');
+		//abstract
+			//console.log('update graph', configData);
+			//this.plotGraph(configData.config);
+		} ,
+	 /* listeners: {
+		'change-graph-config':'_changeGraphConfig'
+	  },
+		
+		properties: {
+			graphConfig: {
+			  type: Object,
+			  value: function() {
+				return {};
+			  }
+			}
+      },
+	  _changeGraphConfig: function(e, data) {
+			this.graphConfig = data.config;
+			
+			// the parent makes the child fire an event
+			var childElement = Polymer.dom(this.root).querySelector('graph-view');
+			childElement.fire('update-graph-config', data);
+			
+			console.log('from master', this.graphConfig);
+		}
+*/
+    });
+
+  </script>
+
+</dom-module>
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="behaviours/graphBehaviour.html">
+<dom-module id="settings-panel">
+  <template>
+	<div>
+		<paper-input label="Title" value="{{graphConfig.title}}"></paper-input>
+	</div>
+	
+	<div>
+		<paper-dropdown-menu label="Layout" value="{{graphConfig.layout}}">
+		  <paper-listbox class="dropdown-content" selected="1">
+			<paper-item>Column</paper-item>
+			<paper-item>Bar</paper-item>
+			<paper-item>Pie</paper-item>
+		  </paper-listbox>
+		</paper-dropdown-menu>
+	</div>
+	
+	<div>
+		<paper-dropdown-menu label="Time Span" value="{{graphConfig.timespan}}">
+		  <paper-listbox class="dropdown-content" selected="1">
+			<paper-item>Past 12 Weeks</paper-item>
+			<paper-item>Past 6 Weeks</paper-item>
+			<paper-item>Past Week</paper-item>
+		  </paper-listbox>
+		</paper-dropdown-menu>
+	</div>
+	
+	<div>
+		<paper-dropdown-menu label="Refresh Rate" value="{{graphConfig.refreshRate}}">
+		  <paper-listbox class="dropdown-content" selected="1">
+			<paper-item>1 Hour</paper-item>
+			<paper-item>30 Minutes</paper-item>
+			<paper-item>5 Minutes</paper-item>
+			<paper-item>1 Minute</paper-item>
+		  </paper-listbox>
+		</paper-dropdown-menu>
+	</div>
+	
+	<div>
+		<paper-textarea label="Graph JSON"></paper-textarea>
+	</div>
+	
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'settings-panel',
+     /* behaviors: [GraphBehaviour.RenderBehaviour],
+	   _updateGraph: function(data) {
+			console.log('my update child settings', data);
+		}
+      /*properties: {
+		graphConfig: {
+          type: Object,
+          value: function() {
+            return {
+				title: 'Vertical Grouped Chart',
+			};
+          }
+        }
+      },
+
+	  observers:['graphConfigChanged(graphConfig.*)'],
+	  
+	  graphConfigChanged: function(config) {
+	  //console.log(this.graphConfig);
+	  //console.log(config);
+		this.fire('change-graph-config', {
+          config: this.graphConfig,
+        });
+	  },*/
+	 
+    });
+  </script>
+</dom-module>

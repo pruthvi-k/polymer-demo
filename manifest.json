@@ -1,0 +1,7 @@
+{
+  "name": "Status-Report",
+  "short_name": "Status-Report",
+  "description": "appliction to display graphical representation of status",
+  "start_url": "/",
+  "display": "standalone"
+}
