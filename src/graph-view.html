@@ -44,6 +44,7 @@ Polymer({
         console.log('filter data', value);
         var today = new Date();
         var weekStart = new Date(today.setDate(today.getDate() - today.getDay()-value)).toUTCString();
+        this._mapData();
         //var current = new Date();
         //var startDate = current.setDate(current.getDate() - value);
         console.log('past date', weekStart);
@@ -95,7 +96,15 @@ Polymer({
             });
         }
     },
-    _filterData: function() {
+    _mapData: function() {
+        var series = this.getSeriesData();
+        for (seriesRow = 0; seriesLength = series.length, seriesRow < seriesLength; seriesRow++) {
+           //console.log(series[seriesRow].data); 
+           var dataLength = series[seriesRow].data.length
+           for (dataIndex = 0; dataIndex < dataLength; dataIndex++) {
+                console.log(series[seriesRow].data[dataIndex]); 
+            } 
+        }       
         
     },
     getSeriesData: function () {
