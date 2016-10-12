@@ -12,32 +12,32 @@
         </div>
 
         <div>
-            <paper-dropdown-menu label="Layout" value="{{graphConfig.layout}}">
-                <paper-listbox class="dropdown-content" selected="1">
-                    <paper-item>Column</paper-item>
-                    <paper-item>Bar</paper-item>
-                    <paper-item>Pie</paper-item>
+            <paper-dropdown-menu label="Layout">
+                <paper-listbox attr-for-selected="label" selected="{{graphConfig.layout}}" class="dropdown-content">
+                    <paper-item label="bar">Bar</paper-item>
+                    <paper-item label="spline">Line</paper-item>                    
+                    <paper-item label="area">Area</paper-item>
                 </paper-listbox>
             </paper-dropdown-menu>
         </div>
 
         <div>
-            <paper-dropdown-menu label="Past Weeks" value="{{graphConfig.timeSpan}}">
-                <paper-listbox class="dropdown-content" selected="1">
-                    <paper-item value="12">12</paper-item>
-                    <paper-item value="6">6</paper-item>
-                    <paper-item value="1">1</paper-item>
+            <paper-dropdown-menu label="Past Weeks">
+                <paper-listbox attr-for-selected="label" selected="{{graphConfig.timeSpan}}" class="dropdown-content">
+                    <paper-item label="12">Past 12 weeks</paper-item>
+                    <paper-item label="6">Past 6 weeks</paper-item>
+                    <paper-item label="1">Past 1 week</paper-item>
                 </paper-listbox>
             </paper-dropdown-menu>
         </div>
 
         <div>
-            <paper-dropdown-menu label="Refresh Rate" value="{{graphConfig.refreshRate}}">
-                <paper-listbox class="dropdown-content" selected="1">
-                    <paper-item>1 Hour</paper-item>
-                    <paper-item>30 Minutes</paper-item>
-                    <paper-item>5 Minutes</paper-item>
-                    <paper-item>1 Minute</paper-item>
+            <paper-dropdown-menu label="Refresh Rate">
+                <paper-listbox attr-for-selected="label" selected="{{graphConfig.refreshRate}}" class="dropdown-content">
+                    <paper-item label="60">1 Hour</paper-item>
+                    <paper-item label="30">30 Minutes</paper-item>
+                    <paper-item label="5">5 Minutes</paper-item>
+                    <paper-item label="1">1 Minute</paper-item>
                 </paper-listbox>
             </paper-dropdown-menu>
         </div>
@@ -56,7 +56,9 @@
                 settingsData: {type: Object, notify: true},
                 graphConfig: {type: Object,
                     value: function () {
-                        return {};
+                        return {
+                            layout: 'bar'
+                        };
                     }
                 }
             },
@@ -64,7 +66,7 @@
             _graphConfigChanged: function (data) {
                 console.log('graph config change', data);
                 var type = "";
-                switch(data.path) {
+                switch (data.path) {
                     case 'graphConfig.title':
                         type = 'title';
                         break;
@@ -76,23 +78,59 @@
                         break;
                     case 'graphConfig.refreshRate':
                         type = 'refresh-rate';
-                        break;                        
+                        break;
                     case 'graphConfig.seriesData':
                         type = 'series';
                         break;
                 }
-                
+
                 this.settingsData = {
                     type: type,
                     value: data.value
                 };
                 //this.settingsData = d.base;
+            },
+            getSeriesData2: function () {
+                return [{
+                        name: 'Open',
+                        data: [
+                            [Date.UTC(2016, 9, 9), 0.30],
+                            [Date.UTC(2016, 9, 4), 0.28],
+                            [Date.UTC(2016, 8, 19), 0.25],
+                            [Date.UTC(2016, 8, 11), 0.79],
+                            [Date.UTC(2016, 7, 26), 0.72],
+                            [Date.UTC(2016, 7, 3), 1.02],
+                            [Date.UTC(2016, 7, 11), 1.12],
+                        ],
+                        pointWidth: 20
+                    }, {
+                        name: 'Awaiting',
+                        data: [
+                            [Date.UTC(2016, 9, 10), 0.47],
+                            [Date.UTC(2016, 9, 9), 0.70],
+                            [Date.UTC(2016, 8, 25), 0.71],
+                            [Date.UTC(2016, 8, 2), 4.02],
+                            [Date.UTC(2016, 7, 10), 2.12],
+                            [Date.UTC(2016, 6, 20), 1.30],
+                            [Date.UTC(2016, 6, 3), 1.28],
+                            [Date.UTC(2016, 5, 8), 1.25],
+                        ],
+                        pointWidth: 20
+                    }, {
+                        name: 'Close',
+                        data: [
+                            [Date.UTC(2016, 10, 9), 1.47],
+                            [Date.UTC(2016, 10, 5), 2.79],
+                            [Date.UTC(2016, 9, 26), 3.72],
+                            [Date.UTC(2016, 9, 3), 1.02],
+                            [Date.UTC(2016, 8, 11), 5.12],
+                            [Date.UTC(2016, 8, 3), 4.02],
+                            [Date.UTC(2016, 7, 11), 7.12],
+                            [Date.UTC(2016, 6, 21), 2.30],
+                        ],
+                        pointWidth: 20
+                    }];
             }
-            //            _changeArray: function() {
-            //                console.log('from settings panel',this.settingsData);
-            //              //  this.settingsData = {title:this.gdata.title};
-            //            },
-
         });
     </script>
 </dom-module>
