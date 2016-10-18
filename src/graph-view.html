@@ -8,9 +8,9 @@
 
     <template>
        
-        <h4 id="gtitle" align="center">{{graphTitle}}        </h4>
+        <h4 id="gtitle" align="center">{{graphTitle}}</h4>
         
-            <div id="chartContainer"></div>
+            <div id="chartContainer" style="width: 800px"></div>
         
     </template>
 
@@ -45,7 +45,7 @@ Polymer({
        
         var series = this.seriesData || this.getSeriesData();
         var today = new Date();
-        var start = new Date(today.setDate(today.getDate() - today.getDay()-value));
+        var start = new Date(today.setDate(today.getDate() - today.getDay()- value));
         range = Date.UTC(start.getFullYear(), start.getMonth(), start.getDay());
       // console.log('befor echange final series data', this.getSeriesData());
         series = this._mapData(series, range);

@@ -9,7 +9,7 @@
 <dom-module id="settings-panel">
     <template>
         <div>
-            <paper-input label="Title" value="{{graphConfig.title}}"></paper-input>
+            <paper-input id="graph_title" label="Title" value="{{graphConfig.title}}"></paper-input>
         </div>
 
         <div>
@@ -50,7 +50,7 @@
         <div>
             <h5>Settings</h5>
             <hr>
-        <paper-toggle-button invalid>Invalid</paper-toggle-button>
+        <paper-toggle-button noink>Invalid</paper-toggle-button>
         
         </div>
         <!--<div on-click="_changeArray">Change</div>-->
@@ -69,6 +69,9 @@
                         };
                     }
                 }
+            },
+            attached: function() {
+              this.graphConfig.title = "abc";  
             },
             observers: ['_graphConfigChanged(graphConfig.*)'],
             _graphConfigChanged: function (data) {
