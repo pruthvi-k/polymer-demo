@@ -8,6 +8,13 @@
 
 <dom-module id="settings-panel">
     <template>
+	<style>
+      :host {
+        display: block;
+      }
+      
+    </style>
+	<div>
         <div>
             <paper-input id="graph_title" label="Title" value="{{graphConfig.title}}"></paper-input>
         </div>
@@ -43,17 +50,18 @@
             </paper-dropdown-menu>
         </div>
 
-        <div>          
+        <!--<div>          
             <paper-textarea label="Graph JSON" value="{{graphConfig.seriesData}}"></paper-textarea>
-        </div>
+        </div> -->
         
         <div>
             <h5>Settings</h5>
             <hr>
-        <paper-toggle-button noink>Invalid</paper-toggle-button>
+        <paper-toggle-button noink checked="{{showChart}}">Show Div</paper-toggle-button>
+		{{showChart}}
         
         </div>
-        <!--<div on-click="_changeArray">Change</div>-->
+		</div>
     </template>
 
     <script>
@@ -68,14 +76,15 @@
                             layout: 'bar'
                         };
                     }
-                }
+                },
+				showChart:{type:Boolean, notify: true},
             },
             attached: function() {
               this.graphConfig.title = "abc";  
             },
             observers: ['_graphConfigChanged(graphConfig.*)'],
             _graphConfigChanged: function (data) {
-                console.log('graph config change', data);
+               // console.log('graph config change', data);
                 var type = "";
                 switch (data.path) {
                     case 'graphConfig.title':
@@ -100,47 +109,6 @@
                     value: data.value
                 };
                 //this.settingsData = d.base;
-            },
-            getSeriesData2: function () {
-                return [{
-                        name: 'Open',
-                        data: [
-                            [Date.UTC(2016, 9, 9), 0.30],
-                            [Date.UTC(2016, 9, 4), 0.28],
-                            [Date.UTC(2016, 8, 19), 0.25],
-                            [Date.UTC(2016, 8, 11), 0.79],
-                            [Date.UTC(2016, 7, 26), 0.72],
-                            [Date.UTC(2016, 7, 3), 1.02],
-                            [Date.UTC(2016, 7, 11), 1.12],
-                        ],
-                        pointWidth: 20
-                    }, {
-                        name: 'Awaiting',
-                        data: [
-                            [Date.UTC(2016, 9, 10), 0.47],
-                            [Date.UTC(2016, 9, 9), 0.70],
-                            [Date.UTC(2016, 8, 25), 0.71],
-                            [Date.UTC(2016, 8, 2), 4.02],
-                            [Date.UTC(2016, 7, 10), 2.12],
-                            [Date.UTC(2016, 6, 20), 1.30],
-                            [Date.UTC(2016, 6, 3), 1.28],
-                            [Date.UTC(2016, 5, 8), 1.25],
-                        ],
-                        pointWidth: 20
-                    }, {
-                        name: 'Close',
-                        data: [
-                            [Date.UTC(2016, 10, 9), 1.47],
-                            [Date.UTC(2016, 10, 5), 2.79],
-                            [Date.UTC(2016, 9, 26), 3.72],
-                            [Date.UTC(2016, 9, 3), 1.02],
-                            [Date.UTC(2016, 8, 11), 5.12],
-                            [Date.UTC(2016, 8, 3), 4.02],
-                            [Date.UTC(2016, 7, 11), 7.12],
-                            [Date.UTC(2016, 6, 21), 2.30],
-                        ],
-                        pointWidth: 20
-                    }];
             }
         });
     </script>

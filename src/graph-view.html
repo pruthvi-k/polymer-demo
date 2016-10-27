@@ -11,7 +11,9 @@
         <h4 id="gtitle" align="center">{{graphTitle}}</h4>
         
             <div id="chartContainer" style="width: 800px"></div>
-        
+        <div hidden$="{{!showGraph}}">
+		<paper-fab icon="favorite" title="heart"></paper-fab>
+		This div is to test binding via event/listner {{showGraph}}</div>
     </template>
 
     <script>
@@ -19,15 +21,30 @@ var chart;
 var seriesData;
 Polymer({
     is: 'graph-view',
+
     properties: {
-        seriesData: {type: Object, notify: true},
-        showGraph: {type: Boolean, value: false},
+        seriesData: {type: Object},// notify: true, readonly:false, observer:"_setSeries"},
+        showGraph: {type: Boolean},
         graphTitle: {type: String, notify: true, observer: '_setGraphTitle', value: 'Vertical Grouped Chart'},
         type: {type: String, notify: true, observer: '_setGraphType'},
         timespan:{type: Number, notify: true, observer: '_filterData'},
         filterType: {type: String}
     },
+	_setSeries: function(){
+		this.seriesData = this.getSeriesData();
+		console.log('here is series data', this.seriesData);
+	},
+	/*listeners: {
+        'test': '_handleShowLabelContainer'
+    },
+    _handleShowLabelContainer: function(e) {
+        console.log(e);
+    },*/
     ready: function () {
+	console.log('i',this.seriesData);
+	document.addEventListener('handleShowLabelContainer', function(e) {
+            this.showGraph = e.detail.show;
+          }.bind(this));
 //        var options = options || new Object();
 //
 //        options.chart = options.chart || new Object();
@@ -43,7 +60,7 @@ Polymer({
     },
     _filterData: function(value) {
        
-        var series = this.seriesData || this.getSeriesData();
+       var series = this.seriesData;// || this.getSeriesData();
         var today = new Date();
         var start = new Date(today.setDate(today.getDate() - today.getDay()- value));
         range = Date.UTC(start.getFullYear(), start.getMonth(), start.getDay());
@@ -59,6 +76,7 @@ Polymer({
         console.log('graph title changes', value);
     },
     _setGraphType: function (value) {
+	console.log('chart type', value);
         this._changeType(this.chart, value.toLowerCase());
     },
     _changeType: function (chart, newType)
@@ -89,6 +107,10 @@ Polymer({
                         text: ''
                     }
                 },
+				/*xAxis: {
+            categories: ['Apples', 'Bananas', 'Oranges']
+        },*/
+		//series: this.seriesData
                 xAxis: {
                     type: 'datetime',
                     dateTimeLabelFormats: {// don't display the dummy year
@@ -99,7 +121,7 @@ Polymer({
                         text: ''
                     }
                 },
-                series: this.getSeriesData()
+                series: this.seriesData//getSeriesData()
             });
         }
     },
@@ -125,47 +147,7 @@ Polymer({
        //this.chart.redraw(); 
       //  return series;
     },
-    getSeriesData: function () {
-        return [{
-                name: 'Open',
-                data: [
-                    [Date.UTC(2016, 9, 9), 0.30],
-                    [Date.UTC(2016, 9, 4), 0.28],
-                    [Date.UTC(2016, 8, 19), 0.25],
-                    [Date.UTC(2016, 8, 11), 0.79],
-                    [Date.UTC(2016, 7, 26), 0.72],
-                    [Date.UTC(2016, 7, 3), 1.02],
-                    [Date.UTC(2016, 7, 11), 1.12],
-                ],
-                pointWidth: 20
-            }, {
-                name: 'Awaiting',
-                data: [
-                    [Date.UTC(2016, 9, 10), 0.47],
-                    [Date.UTC(2016, 9, 9), 0.70],
-                    [Date.UTC(2016, 8, 25), 0.71],
-                    [Date.UTC(2016, 8, 2), 4.02],
-                    [Date.UTC(2016, 7, 10), 2.12],
-                    [Date.UTC(2016, 6, 20), 1.30],
-                    [Date.UTC(2016, 6, 3), 1.28],
-                    [Date.UTC(2016, 5, 8), 1.25],
-                ],
-                pointWidth: 20
-            }, {
-                name: 'Close',
-                data: [
-                    [Date.UTC(2016, 10, 9), 1.47],
-                    [Date.UTC(2016, 10, 5), 2.79],
-                    [Date.UTC(2016, 9, 26), 3.72],
-                    [Date.UTC(2016, 9, 3), 1.02],
-                    [Date.UTC(2016, 8, 11), 5.12],
-                    [Date.UTC(2016, 8, 3), 4.02],
-                    [Date.UTC(2016, 7, 11), 7.12],
-                    [Date.UTC(2016, 6, 21), 2.30],
-                ],
-                pointWidth: 20
-            }];
-    }
+    
     // behaviors: [GraphBehaviour.RenderBehaviour],	 
     /*ready: function() {
      this.addEventListener('updateGraphConfig', this._shouldUpdateGraphConfig);

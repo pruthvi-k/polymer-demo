@@ -18,7 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/app-layout/demo/sample-content.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
-
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="settings-panel.html">
 <link rel="import" href="graph-view.html">
 
@@ -51,7 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-icon-button icon="timeline" drawer-toggle></paper-icon-button>
                     Graph Configuration
                 </app-toolbar>
-                <settings-panel settings-data="{{settingsData}}"></settings-panel>
+                <settings-panel align="left" settings-data="{{settingsData}}" show-chart= "{{showChart}}"></settings-panel>
             </app-drawer>
 
             <app-header-layout>
@@ -64,7 +64,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                
                 <div >		
                     <div class="graph-container">
-                    <graph-view 
+                    <graph-view 		
                         series-data="{{graphData}}" 
                         graph-title="{{graphTitle}}" 
                         type="{{graphLayout}}"                        
@@ -73,9 +73,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     >                           
                     </graph-view>
                     </div>
+					
                 </div>
             </app-header-layout>
         </app-drawer-layout>
+		<iron-ajax bubbles="true" id="SendPkg"
+    auto
+    url="https://www.googleapis.com/youtube/v3/search"
+    params='{"part":"snippet", "q":"polymer", "key": "YOUTUBE_API_KEY", "type": "video"}'
+    handle-as="json" on-error="handleResponse2" 
+    on-response="handleResponse2"
+    debounce-duration="300"></iron-ajax>
     </template>
 
     <script>
@@ -84,14 +92,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             is: 'master-layout',
             properties: {
                 settingsData: {type: Object, observer: '_settingsDataChange'},
+				showChart: {type: Boolean, observer: '_showChartChange'},
                 //graphData: {type: Object},
                 //graphTitle: {type:String},
                 //graphLayout: {type:String},
                 //filterRange:{type: Number}
             },
+			_showChartChange: function(show) {	
+		
+				this.fire('handleShowLabelContainer', {'show': show});
+			},
+			handleResponse2:function(a) {
+				console.log('handle', a);
+			},
             // observers:['_xitemchange(settingsData.*)'],
             _settingsDataChange: function (data) {
-                console.log('settings', data);
+                //console.log('settings', data);
                 if(data.type === 'title') {
                     this.graphTitle = data.value;
                 } else if(data.type === 'layout') {
@@ -107,11 +123,52 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                //this.graphData = {title: data.title, layout: data.layout};
             },
             
-            /*_graphDatachange: function(data) {
-             console.log('ggggg ',data);
-             this.graphData = this.settingsData;
-             console.log('master2 - graph data change from here', this.graphData);
-             }*/
+            ready: function() {
+            // console.log('ggggg ',data);
+             this.graphData = this.getSeriesData();
+          //   console.log('master2 - graph data change from here', this.graphData);
+             },
+			 getSeriesData: function () {
+        return [{
+                name: 'Open',
+                data: [
+                    [Date.UTC(2016, 9, 9), 0.30],
+                    [Date.UTC(2016, 9, 4), 0.28],
+                    [Date.UTC(2016, 8, 19), 0.25],
+                    [Date.UTC(2016, 8, 11), 0.79],
+                    [Date.UTC(2016, 7, 26), 0.72],
+                    [Date.UTC(2016, 7, 3), 1.02],
+                    [Date.UTC(2016, 7, 11), 1.12],
+                ],
+                pointWidth: 20
+            }, {
+                name: 'Awaiting',
+                data: [
+                    [Date.UTC(2016, 9, 10), 0.47],
+                    [Date.UTC(2016, 9, 9), 0.70],
+                    [Date.UTC(2016, 8, 25), 0.71],
+                    [Date.UTC(2016, 8, 2), 4.02],
+                    [Date.UTC(2016, 7, 10), 2.12],
+                    [Date.UTC(2016, 6, 20), 1.30],
+                    [Date.UTC(2016, 6, 3), 1.28],
+                    [Date.UTC(2016, 5, 8), 1.25],
+                ],
+                pointWidth: 20
+            }, {
+                name: 'Close',
+                data: [
+                    [Date.UTC(2016, 10, 9), 1.47],
+                    [Date.UTC(2016, 10, 5), 2.79],
+                    [Date.UTC(2016, 9, 26), 3.72],
+                    [Date.UTC(2016, 9, 3), 1.02],
+                    [Date.UTC(2016, 8, 11), 5.12],
+                    [Date.UTC(2016, 8, 3), 4.02],
+                    [Date.UTC(2016, 7, 11), 7.12],
+                    [Date.UTC(2016, 6, 21), 2.30],
+                ],
+                pointWidth: 20
+            }];
+    }
 
         });
 
