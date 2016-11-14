@@ -1,0 +1,43 @@
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="behaviours/graphBehaviour.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<dom-module id="photo-gallery">
+    <template>
+	<style>
+      :host {
+        display: block;
+      }
+      
+    </style>
+	<paper-button raised onclick="modal.open()">modal dialog</paper-button>
+	<paper-dialog id="modal" modal>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <div class="buttons">
+          <paper-button dialog-confirm autofocus>Tap me to close</paper-button>
+        </div>
+      </paper-dialog>
+
+    <script>
+        Polymer({
+            is: 'photo-gallery',
+			attached: function() {
+			console.log('images', Polymer.dom(this).querySelectorAll('img'));
+                        var images = Polymer.dom(this).querySelectorAll('img');
+                        /*var container = this.$.links;
+                        for (var img in images) {
+                            images[img].addEventListener('click',this.load_popup);
+                            container.appendChild(images[img]);
+                        }*/
+                },
+                load_popup: function(e, detail, sender) {
+				console.log(e);
+				modal.open();
+				}
+        });
+    </script>
+</dom-module>
