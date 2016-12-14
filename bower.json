@@ -11,7 +11,8 @@
     "paper-item": "^1.2.1",
     "paper-dropdown-menu": "^1.4.1",
     "paper-toggle-button": "PolymerElements/paper-toggle-button#^1.2.1",
-    "paper-dialog": "PolymerElements/paper-dialog#^1.1.0"
+    "paper-dialog": "PolymerElements/paper-dialog#^1.1.0",
+    "paper-checkbox": "PolymerElements/paper-checkbox#^1.4.2"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
