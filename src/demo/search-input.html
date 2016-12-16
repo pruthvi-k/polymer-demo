@@ -8,34 +8,29 @@
     <template>
         <style include="simple-style"></style>
         <div class="flex-horizontal">
-            {{status}}
-            <div is="dom-if" if$="{{status}}">
-                <paper-icon-button icon="close" title="hide" on-tap="showSearchInput"></paper-icon-button>
+
+            <template is="dom-if" if="{{dynamic}}">
+            <div >
+                <paper-icon-button icon="close" title="hide" ></paper-icon-button>
             </div>
+
             <div class="flex-child">
-                <paper-input id="search" hidden="{{!showme}}"></paper-input>
+                <paper-input id="search" ></paper-input>
             </div>
+            </template>
             <div>
-                <paper-icon-button icon="search" title="search"></paper-icon-button>
+                <paper-icon-button icon="search" title="search" on-tap="toggle"></paper-icon-button>
             </div>
         </div>
     </template>
     <script>
         Polymer({
             is:'search-input', //element name
-            properties:  {
-                showme:{
-                    type:Boolean,
-                    value:true
-                }
+            properties: {
+                dynamic:{type:Boolean}
             },
-            ready:function(){
-                console.log('a', this.isDynamic);
-            },
-            showSearchInput: function () {
-                console.log('s', this.isDynamic);
-
-                this.showme = false;
+            toggle: function() {
+                this.dynamic = !this.dynamic;
             }
         })
     </script>
